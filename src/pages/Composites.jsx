@@ -59,6 +59,7 @@ function Composites() {
       width: 100,
       render: (reviews) => reviews?.length || 0,
     },
+
     {
       title: "Recommendations",
       dataIndex: "recommendations",
@@ -75,26 +76,28 @@ function Composites() {
         <Table
           size="small"
           pagination={false}
-          dataSource={record.reviews}
+          dataSource={record.reviews || []}
           columns={[
             { title: "Author", dataIndex: "author" },
             { title: "Subject", dataIndex: "subject" },
             { title: "Content", dataIndex: "content", ellipsis: true },
           ]}
           rowKey={(row) => row.id}
+          bordered
         />
 
         <h4 className="font-bold mb-2 mt-4">Recommendations</h4>
         <Table
           size="small"
           pagination={false}
-          dataSource={record.recommendations}
+          dataSource={record.recommendations || []}
           columns={[
             { title: "Author", dataIndex: "author" },
             { title: "Rating", dataIndex: "rate" },
             { title: "Content", dataIndex: "content", ellipsis: true },
           ]}
           rowKey={(row) => row.id}
+          bordered
         />
       </div>
     );
@@ -130,7 +133,14 @@ function Composites() {
           expandedRowRender,
           expandRowByClick: true,
         }}
+        bordered
       />
+
+      {loading && (
+        <div className="flex justify-center p-8">
+          <Spin />
+        </div>
+      )}
     </div>
   );
 }
