@@ -61,12 +61,12 @@ function Composites() {
     },
     {
       title: 'Reviews',
-      dataIndex: 'reviews',
-      key: 'reviews',
+      dataIndex: 'review',
+      key: 'review',
       width: 250,
-      render: (reviews) => {
-    if (!reviews || reviews.length === 0) return 'No reviews';
-    const firstReview = reviews[0];
+      render: (review) => {
+    if (!review || review.length === 0) return 'No reviews';
+    const firstReview = review[0];
     return `${firstReview.author}: ${firstReview.content.slice(0, 30)}...`;
   },
   
@@ -74,12 +74,12 @@ function Composites() {
 
     {
       title: 'Recommendations',
-      dataIndex: 'recommendations',
-      key: 'recommendations',
+      dataIndex: 'recommendation',
+      key: 'recommendation',
       width: 150,
-       render: (recommendations) => {
-    if (!recommendations || recommendations.length === 0) return 'No recommendations';
-    const firstRec = recommendations[0];
+       render: (recommendation) => {
+    if (!recommendation || recommendation.length === 0) return 'No recommendations';
+    const firstRec = recommendation[0];
     return `${firstRec.author}: ${firstRec.content.slice(0, 30)}...`;
      
     }
@@ -93,7 +93,7 @@ function Composites() {
         <Table
           size="small"
           pagination={false}
-          dataSource={record.reviews || []}
+          dataSource={record.review || []}
           columns={[
             { title: 'Author', dataIndex: 'author', key: 'author' },
             { title: 'Subject', dataIndex: 'subject', key: 'subject' },
@@ -107,7 +107,7 @@ function Composites() {
         <Table
           size="small"
           pagination={false}
-          dataSource={record.recommendations || []}
+          dataSource={record.recommendation || []}
           columns={[
             { title: 'Author', dataIndex: 'author', key: 'author' },
             { title: 'Rating', dataIndex: 'rate', key: 'rate' },
