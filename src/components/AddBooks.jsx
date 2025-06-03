@@ -16,6 +16,7 @@ function AddBooks() {
         weight: values.weight
       });
       setSuccessPopup({ visible: true, title: 'Book Added Successfully!' });
+      // message.success('Book added successfully');
       setTimeout(() => {
         navigate('/dashboard/books');
       }, 2000);
@@ -67,14 +68,12 @@ function AddBooks() {
             >
               Add Book
             </Button>
-            <Link to="/dashboard/books">
-              <Button
-                // onClick={() => navigate('dashboard/books')}
-                className="h-10 px-6"
-              >
-                Cancel
-              </Button>
-            </Link>
+            <Button 
+              onClick={() => navigate('/dashboard/books')} // Fix navigation
+              className="h-10 px-6"
+            >
+              Cancel
+            </Button>
           </div>
         </Form.Item>
       </Form>

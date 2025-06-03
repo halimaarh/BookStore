@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { Table, Button, message, Popconfirm, Input } from "antd";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
+
 import axios from "axios";
 import { Space } from "antd";
 import CustomPopup from '../components/CustomPopup';
@@ -44,34 +46,34 @@ function Books() {
     }
   };
 
-  const handleCreate = async (values) => {
-    try {
-      await axios.post("https://bookservice-a2qm.onrender.com/api/v1/books", {
-        name: values.name,
-        weight: values.weight,
-      });
-      message.success("Book created successfully");
-      fetchBooks();
-    } catch (error) {
-      message.error("Failed to create book");
-    }
-  };
+  // const handleCreate = async (values) => {
+  //   try {
+  //     await axios.post("https://bookservice-a2qm.onrender.com/api/v1/books", {
+  //       name: values.name,
+  //       weight: values.weight,
+  //     });
+  //     message.success("Book created successfully");
+  //     fetchBooks();
+  //   } catch (error) {
+  //     message.error("Failed to create book");
+  //   }
+  // };
 
-  const handleUpdate = async (bookId, values) => {
-    try {
-      await axios.put(
-        `https://bookservice-a2qm.onrender.com/api/v1/books/${bookId}`,
-        {
-          name: values.name,
-          weight: values.weight,
-        }
-      );
-      message.success("Book updated successfully");
-      fetchBooks();
-    } catch (error) {
-      message.error("Failed to update book");
-    }
-  };
+  // const handleUpdate = async (bookId, values) => {
+  //   try {
+  //     await axios.put(
+  //       `https://bookservice-a2qm.onrender.com/api/v1/books/${bookId}`,
+  //       {
+  //         name: values.name,
+  //         weight: values.weight,
+  //       }
+  //     );
+  //     message.success("Book updated successfully");
+  //     fetchBooks();
+  //   } catch (error) {
+  //     message.error("Failed to update book");
+  //   }
+  // };
 
   const handleSearch = (value) => {
     fetchBooks(value);

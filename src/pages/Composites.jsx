@@ -14,7 +14,6 @@ function Composites() {
         : 'https://bookcomposite.onrender.com/api/v1/bookcomposite';
       
       const response = await axios.get(url);
-      // If searchId is provided, fetch that specific book details
       setComposites(Array.isArray(response.data) ? response.data : [response.data]);
     } catch (error) {
       console.error('Error:', error);
@@ -62,39 +61,38 @@ function Composites() {
       title: 'Recommendations',
       dataIndex: 'recommendations',
       key: 'recommendations',
-      width: 100,
+      width: 150,
       render: (recommendations) => recommendations?.length || 0
     }
   ];
 
   const expandedRowRender = (record) => {
-    const book = record.book;
     return (
       <div className="p-4">
         <h4 className="font-bold mb-2">Reviews</h4>
         <Table
           size="small"
           pagination={false}
-          dataSource={book.reviews}
+          dataSource={record.reviews}
           columns={[
             { title: 'Author', dataIndex: 'author' },
             { title: 'Subject', dataIndex: 'subject' },
             { title: 'Content', dataIndex: 'content', ellipsis: true }
           ]}
-          rowKey="id"
+          rowKey={(row) => row.id}
         />
-        
+
         <h4 className="font-bold mb-2 mt-4">Recommendations</h4>
         <Table
           size="small"
           pagination={false}
-          dataSource={book.recommendations}
+          dataSource={record.recommendations}
           columns={[
             { title: 'Author', dataIndex: 'author' },
             { title: 'Rating', dataIndex: 'rate' },
             { title: 'Content', dataIndex: 'content', ellipsis: true }
           ]}
-          rowKey="Id"
+          rowKey={(row) => row.id}
         />
       </div>
     );

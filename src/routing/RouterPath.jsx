@@ -14,6 +14,7 @@ import EditRecommendation from '../components/EditRecommendation';
 import AddReview from '../components/AddReview';
 import EditReview from '../components/EditReview';
 import LandingPage from '../pages/LandingPage';
+import Profile from '../pages/Profile';
 
 const RouterPath = () => {
   return (
@@ -24,7 +25,7 @@ const RouterPath = () => {
       <Route path="/login" element={<Login />} />
       <Route path="/dashboard" element={<DashboardLayout />}>
         <Route index element={<Home />} />
-        <Route path="profile" element={<div>Profile Page</div>} />
+        <Route path="profile" element={<Profile/>} />
         <Route path="books" element={ <Books/>} />
         <Route path="recomendations" element={<Recomendation/>} />
         <Route path="reviews" element={<Reviews/>} />
