@@ -30,7 +30,7 @@ const Sidebar = () => {
 
   const handleMenuClick = ({ key }) => {
     if (key === '/logout') {
-      navigate('/');
+      navigate('/login');
     } else {
       navigate(key);
     }
