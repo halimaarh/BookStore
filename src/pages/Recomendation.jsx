@@ -1,137 +1,29 @@
-// import { useState, useEffect } from 'react';
-// import { Table, Space, Button, message, Popconfirm, Input } from 'antd';
-// import { Link } from 'react-router-dom';
-// import axios from 'axios';
-
-// function Recomendation() {
-//   const [recommendations, setRecommendations] = useState([]);
-//   const [loading, setLoading] = useState(false);
-
-//   const fetchRecommendations = async (searchId = '') => {
-//     setLoading(true);
-//     try {
-//       const url = searchId
-//         ? `https://recommendationservice-rlr1.onrender.com/api/v1/recommendations/find/${searchId}`
-//         : 'https://recommendationservice-rlr1.onrender.com/api/v1/recommendations/';
-      
-//       const res = await axios.get(url);
-//       setRecommendations(Array.isArray(res.data) ? res.data : [res.data]);
-//     } catch (error) {
-//       message.error('Failed to load recommendations');
-//       setRecommendations([]);
-//     } finally {
-//       setLoading(false);
-//     }
-//   };
-
-//   useEffect(() => {
-//     fetchRecommendations();
-//   }, []);
-
-//   const handleSearch = (value) => {
-//     fetchRecommendations(value);
-//   };
-
-//   const handleDelete = async (recommendationId) => {
-//     try {
-//       await axios.delete(`https://recommendationservice-rlr1.onrender.com/api/v1/recommendations/${recommendationId}`);
-//       message.success('Recommendation deleted');
-//       fetchRecommendations();
-//     } catch (error) {
-//       message.error('Failed to delete recommendation');
-//     }
-//   };
-
-//   const columns = [
-//     { title: 'Recommendation Id', dataIndex: 'recommendationId', key: 'recommendationId' },
-//     { title: 'Book ID', dataIndex: 'bookId', key: 'bookId' },
-//     { title: 'Author', dataIndex: 'author', key: 'author' },
-//     { title: 'Rate', dataIndex: 'rate', key: 'rate' },
-//     { title: 'Content', dataIndex: 'content', key: 'content', ellipsis: true },
-//     {
-//       title: 'Actions',
-//       key: 'actions',
-//       render: (_, record) => (
-//         <Space>
-//           <Link to={`/dashboard/edit-recommendation/${record.bookId}`}>
-//             <Button type="primary" ghost>Edit</Button>
-//           </Link>
-//           <Popconfirm
-//             title="Are you sure to delete this recommendation?"
-//             onConfirm={() => handleDelete(record.recommendationId)}
-//             okText="Yes"
-//             cancelText="No"
-//           >
-//             <Button danger>Delete</Button>
-//           </Popconfirm>
-//         </Space>
-//       ),
-//     },
-//   ];
-
-//   return (
-//     <div className="space-y-6 p-6">
-//       <div className="flex items-center justify-between">
-//         <h2 className="text-2xl font-semibold text-gray-800">Recommendations</h2>
-//         <Link to="/dashboard/add-recommendation">
-//           <Button type="primary" className="bg-blue-500 hover:bg-blue-600">
-//             Add Recommendation
-//           </Button>
-//         </Link>
-//       </div>
-
-//       <Input.Search
-//         placeholder="Search by Book ID..."
-//         allowClear
-//         enterButton
-//         onSearch={handleSearch}
-//         style={{ maxWidth: 400, marginBottom: 16 }}
-//         loading={loading}
-//       />
-      
-//       <Table 
-//         columns={columns} 
-//         dataSource={recommendations}
-//         rowKey="recommendationId"
-//         loading={loading}
-//         className="shadow-sm rounded-lg overflow-hidden"
-//         scroll={{ x: true }}
-//       />
-//     </div>
-//   );
-// }
-
-// export default Recomendation;
-
-
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { List, Button, Typography, message, Spin,Input } from "antd";
-import { useNavigate } from "react-router-dom";
-import CustomPopup from '../components/CustomPopup';
-
-
-import { Link } from "react-router-dom";
+import { Table, Button, Typography, message, Spin, Input } from "antd";
+import { useNavigate, Link } from "react-router-dom";
+import CustomPopup from "../components/CustomPopup";
 
 const { Title } = Typography;
-const BASE_URL = "https://recommendationservice-rlr1.onrender.com/api/v1/recommendations/";
+const { Search } = Input;
+
+const BASE_URL =
+  "https://recommendationservice-rlr1.onrender.com/api/v1/recommendations/";
 
 const Recomendation = ({ sidebarWidth }) => {
   const [recommendations, setRecommendations] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [successPopup, setSuccessPopup] = useState({ visible: false, title: '' });
-
+  const [successPopup, setSuccessPopup] = useState({
+    visible: false,
+    title: "",
+  });
   const navigate = useNavigate();
 
-  const fetchRecommendations = async (searchId ='') => {
+  const fetchRecommendations = async (searchId = "") => {
     setLoading(true);
     try {
-       const BASE_URL = searchId
-         ? `https://recommendationservice-rlr1.onrender.com/api/v1/recommendations/${searchId}`
-         : 'https://recommendationservice-rlr1.onrender.com/api/v1/recommendations/';
-      
-      const res = await axios.get(BASE_URL); // Fetch recommendations from the API
-      // setRecommendations(response.data); // Update state with fetched recommendations
+      const url = searchId ? `${BASE_URL}${searchId}` : BASE_URL;
+      const res = await axios.get(url);
       setRecommendations(Array.isArray(res.data) ? res.data : [res.data]);
       message.success("Recommendations fetched successfully!");
     } catch (error) {
@@ -143,32 +35,83 @@ const Recomendation = ({ sidebarWidth }) => {
     }
   };
 
-  
-   const handleSearch = (value) => {
+  const handleSearch = (value) => {
     fetchRecommendations(value);
-   };
+  };
 
-
-    const handleDelete = async (recommendationId) => {
+  const handleDelete = async (recommendationId) => {
     try {
-      await axios.delete(`https://recommendationservice-rlr1.onrender.com/api/v1/recommendations/${recommendationId}`);
-      message.success('Recommendation deleted');
-      setSuccessPopup({ visible: true, title: 'Recommendation Deleted Successfully!' });
+      await axios.delete(`${BASE_URL}${recommendationId}`);
+      message.success("Recommendation deleted");
+      setSuccessPopup({
+        visible: true,
+        title: "Recommendation Deleted Successfully!",
+      });
       fetchRecommendations();
     } catch (error) {
-      message.error('Failed to delete recommendation');
+      message.error("Failed to delete recommendation");
     }
   };
 
   useEffect(() => {
-    fetchRecommendations(); // Fetch recommendations on component mount
+    fetchRecommendations();
   }, []);
+
+  const columns = [
+    {
+      title: "Recommendation ID",
+      dataIndex: "recommendationId",
+      key: "recommendationId",
+    },
+    {
+      title: "Book ID",
+      dataIndex: "bookId",
+      key: "bookId",
+    },
+    {
+      title: "Author",
+      dataIndex: "author",
+      key: "author",
+    },
+    {
+      title: "Rating",
+      dataIndex: "rate",
+      key: "rate",
+    },
+    {
+      title: "Content",
+      dataIndex: "content",
+      key: "content",
+    },
+    {
+      title: "Actions",
+      key: "actions",
+      render: (_, record) => (
+        <>
+          <Link
+            to={`/dashboard/edit-recommendation/${record.recommendationId}`}
+          >
+            <Button type="primary" ghost style={{ marginRight: 8 }}>
+              Edit
+            </Button>
+          </Link>
+          <Button
+            type="link"
+            danger
+            onClick={() => handleDelete(record.recommendationId)}
+          >
+            Delete
+          </Button>
+        </>
+      ),
+    },
+  ];
 
   return (
     <div
       style={{
-        marginLeft: sidebarWidth, // Adjust content based on sidebar width
-        transition: "margin-left 0.3s ease", // Smooth transition when sidebar collapses
+        marginLeft: sidebarWidth,
+        transition: "margin-left 0.3s ease",
         padding: "40px 20px",
         fontFamily: "font-plus",
       }}
@@ -177,8 +120,7 @@ const Recomendation = ({ sidebarWidth }) => {
         style={{
           display: "flex",
           justifyContent: "space-between",
-          alignItems: "center",
-          flexWrap: "wrap", // Allow wrapping for smaller screens
+          flexWrap: "wrap",
           gap: "10px",
           marginBottom: 24,
         }}
@@ -187,55 +129,37 @@ const Recomendation = ({ sidebarWidth }) => {
           Recommendations
         </Title>
         <Link to="/dashboard/add-recommendation">
-           <Button type="primary" className="bg-blue-500 hover:bg-blue-600">
-             Add Recommendation
-           </Button>
-         </Link>
-         <Input.Search
-        placeholder="Search by Book ID..."
-        allowClear
-        enterButton
-         onSearch={handleSearch}
-         style={{ maxWidth: 400, marginBottom: 16 }}
-         loading={loading}
-      />
+          <Button type="primary" className="bg-blue-500 hover:bg-blue-600">
+            Add Recommendation
+          </Button>
+        </Link>
+        <Search
+          placeholder="Search by Book ID..."
+          allowClear
+          enterButton
+          onSearch={handleSearch}
+          style={{ maxWidth: 400 }}
+          loading={loading}
+        />
       </div>
+
       {loading ? (
         <Spin style={{ display: "block", margin: "20px auto" }} />
       ) : (
-        <List
+        <Table
           bordered
           dataSource={recommendations}
-          renderItem={(item) => (
-            <List.Item
-              actions={[
-                
-               <Link to={`/dashboard/edit-recommendation/${item.recommendationId}`}>
-                  <Button type="primary" ghost>Edit</Button>
-               </Link>,
-
-                <Button
-                  type="link"
-                  danger
-                  onClick={() => handleDelete(item.recommendationId)} // Delete recommendation
-                >
-                  Delete
-                </Button>,
-              ]}
-            >
-              <List.Item.Meta
-                title={`ID: ${item.recommendationId}| BookID: ${item.bookId}  | Author: ${item.author} | Rating: ${item.rate}`}
-                description={item.content}
-              />
-            </List.Item>
-          )}
+          columns={columns}
+          rowKey="recommendationId"
+          pagination={{ pageSize: 5 }}
         />
       )}
-        <CustomPopup 
-              visible={successPopup.visible}
-              title={successPopup.title}
-              onClose={() => setSuccessPopup({ visible: false, title: '' })}
-            />
+
+      <CustomPopup
+        visible={successPopup.visible}
+        title={successPopup.title}
+        onClose={() => setSuccessPopup({ visible: false, title: "" })}
+      />
     </div>
   );
 };

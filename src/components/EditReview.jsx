@@ -1,17 +1,20 @@
-import React, { useState, useEffect } from 'react';
-import { Form, Input, Button, message, InputNumber, Spin } from 'antd';
-import { useNavigate, useParams, Link } from 'react-router-dom';
-import CustomPopup from './CustomPopup';
+import React, { useState, useEffect } from "react";
+import { Form, Input, Button, message, InputNumber, Spin } from "antd";
+import { useNavigate, useParams, Link } from "react-router-dom";
+import CustomPopup from "./CustomPopup";
 
-import axios from 'axios';
+import axios from "axios";
 
 const BASE_URL = "https://reviewservice-to9o.onrender.com/api/v1/reviews";
 
 const EditReview = () => {
   const [loading, setLoading] = useState(false);
   const [form] = Form.useForm();
-  const { id } = useParams();  // Make sure the route param is `id`!
-  const [successPopup, setSuccessPopup] = useState({ visible: false, title: '' });
+  const { id } = useParams(); // Make sure the route param is `id`!
+  const [successPopup, setSuccessPopup] = useState({
+    visible: false,
+    title: "",
+  });
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -23,25 +26,23 @@ const EditReview = () => {
           return;
         }
 
-        const response = await axios.get(`${BASE_URL}/${id}`);
-        const { bookId, author, subject, content } = response.data;
+        const response = await axios.get(`${BASE_URL}/review/${id}`);
+        const data = response.data;
+        console.log("Fetched review data:", data);
 
-        form.setFieldsValue({
-          bookId: bookId || "",
-          author: author || "",
-          subject: subject || "",
-          content: content || "",
-        });
-
-        message.success("Review details loaded successfully!");
-        console.log("API Response:", response.data); // Debug API response
-      } catch (error) {
-        console.error("Error fetching review details:", error);
-        if (error.response) {
-          message.error(`Failed to load review: ${error.response.data.message || "Unknown error"}`);
+        if (data && data.bookId !== undefined) {
+          form.setFieldsValue({
+            bookId: data.bookId,
+            author: data.author,
+            subject: data.subject,
+            content: data.content,
+          });
         } else {
-          message.error("Failed to load review.");
+          message.error("Invalid data received from API.");
         }
+      } catch (error) {
+        console.error("Fetch error:", error);
+        message.error("Failed to load review.");
       } finally {
         setLoading(false);
       }
@@ -53,19 +54,23 @@ const EditReview = () => {
   const onFinish = async (values) => {
     setLoading(true);
     try {
-      const response = await axios.put(`${BASE_URL}/${id}`, {
-        bookId: values.bookId,
-        author: values.author,
-        subject: values.subject,
-        content: values.content,
-      }, {
-        headers: { "Content-Type": "application/json" },
-      });
-      
+      const response = await axios.put(
+        `${BASE_URL}/${id}`,
+        {
+          bookId: values.bookId,
+          author: values.author,
+          subject: values.subject,
+          content: values.content,
+        },
+        {
+          headers: { "Content-Type": "application/json" },
+        }
+      );
+
       // Remove duplicate success message
-      setSuccessPopup({ visible: true, title: 'Review Updated Successfully!' });
+      setSuccessPopup({ visible: true, title: "Review Updated Successfully!" });
       setTimeout(() => {
-        navigate('/dashboard/reviews');
+        navigate("/dashboard/reviews");
       }, 3000); // Match CustomPopup timeout
     } catch (error) {
       console.error("Error updating review:", error);
@@ -78,11 +83,15 @@ const EditReview = () => {
   return (
     <div className="max-w-3xl mx-auto space-y-6 p-6">
       {loading ? (
-        <div className="flex justify-center p-8"><Spin size="large" /></div>
+        <div className="flex justify-center p-8">
+          <Spin size="large" />
+        </div>
       ) : (
         <>
           <div className="flex items-center justify-between pb-4 border-b">
-            <h2 className="text-2xl font-semibold text-gray-800">Edit Review</h2>
+            <h2 className="text-2xl font-semibold text-gray-800">
+              Edit Review
+            </h2>
           </div>
 
           <Form
@@ -125,7 +134,11 @@ const EditReview = () => {
 
             <Form.Item>
               <div className="flex gap-4">
-                <Button type="primary" htmlType="submit" className="bg-blue-500">
+                <Button
+                  type="primary"
+                  htmlType="submit"
+                  className="bg-blue-500"
+                >
                   Update Review
                 </Button>
                 <Link to="/dashboard/reviews">
@@ -134,11 +147,11 @@ const EditReview = () => {
               </div>
             </Form.Item>
           </Form>
-            <CustomPopup 
-              visible={successPopup.visible}
-              title={successPopup.title}
-               onClose={() => setSuccessPopup({ visible: false, title: '' })}
-             />
+          <CustomPopup
+            visible={successPopup.visible}
+            title={successPopup.title}
+            onClose={() => setSuccessPopup({ visible: false, title: "" })}
+          />
         </>
       )}
     </div>
