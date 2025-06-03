@@ -13,15 +13,15 @@ import AddRecommendation from '../components/AddRecommendation';
 import EditRecommendation from '../components/EditRecommendation';
 import AddReview from '../components/AddReview';
 import EditReview from '../components/EditReview';
-// import LandingPage from '../pages/LandingPage';
+import LandingPage from '../pages/LandingPage';
 
 const RouterPath = () => {
   return (
     <Routes>
-      {/* <Route index element={<LandingPage />} /> */}
+      <Route index element={<LandingPage />} />
 
-      <Route index element={<Login />} />
-      {/* <Route path="/login" element={<Login />} /> */}
+      {/* <Route index element={<Login />} /> */}
+      <Route path="/login" element={<Login />} />
       <Route path="/dashboard" element={<DashboardLayout />}>
         <Route index element={<Home />} />
         <Route path="profile" element={<div>Profile Page</div>} />
