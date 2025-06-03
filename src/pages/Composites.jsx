@@ -1,22 +1,22 @@
-import { useEffect, useState } from 'react';
-import { Table, Spin, message, Input } from 'antd';
-import axios from 'axios';
+import { useEffect, useState } from "react";
+import { Table, Spin, message, Input } from "antd";
+import axios from "axios";
 
 function Composites() {
   const [composites, setComposites] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  const fetchComposites = async (searchId = '') => {
+  const fetchComposites = async (searchId = "") => {
     setLoading(true);
     try {
       const url = searchId
         ? `https://bookcomposite.onrender.com/api/v1/bookcomposite/${searchId}`
-        : 'https://bookcomposite.onrender.com/api/v1/bookcomposite';
+        : "https://bookcomposite.onrender.com/api/v1/bookcomposite";
 
       const response = await axios.get(url);
 
       // Log the response for debugging
-      console.log('API Response:', response.data);
+      console.log("API Response:", response.data);
 
       // Check if response.data is an array or a single object
       const data = Array.isArray(response.data)
@@ -25,8 +25,8 @@ function Composites() {
 
       setComposites(data);
     } catch (error) {
-      console.error('Error fetching composites:', error);
-      message.error('Failed to fetch composites');
+      console.error("Error fetching composites:", error);
+      message.error("Failed to fetch composites");
       setComposites([]);
     } finally {
       setLoading(false);
@@ -43,46 +43,45 @@ function Composites() {
 
   const columns = [
     {
-      title: 'Book ID',
-      dataIndex: ['book', 'bookId'],
-      key: 'bookId',
+      title: "Book ID",
+      dataIndex: ["book", "bookId"],
+      key: "bookId",
       width: 100,
     },
     {
-      title: 'Name',
-      dataIndex: ['book', 'name'],
-      key: 'name',
+      title: "Name",
+      dataIndex: ["book", "name"],
+      key: "name",
     },
     {
-      title: 'Weight',
-      dataIndex: ['book', 'weight'],
-      key: 'weight',
+      title: "Weight",
+      dataIndex: ["book", "weight"],
+      key: "weight",
       width: 100,
     },
     {
-      title: 'Reviews',
-      dataIndex: 'review',
-      key: 'review',
+      title: "Reviews",
+      dataIndex: "review",
+      key: "review",
       width: 250,
       render: (review) => {
-    if (!review || review.length === 0) return 'No reviews';
-    const firstReview = review[0];
-    return `${firstReview.author}: ${firstReview.content.slice(0, 30)}...`;
-  },
-  
+        if (!review || review.length === 0) return "No reviews";
+        const firstReview = review[0];
+        return `${firstReview.author}: ${firstReview.content.slice(0, 30)}...`;
+      },
     },
 
     {
-      title: 'Recommendations',
-      dataIndex: 'recommendation',
-      key: 'recommendation',
+      title: "Recommendations",
+      dataIndex: "recommendation",
+      key: "recommendation",
       width: 150,
-       render: (recommendation) => {
-    if (!recommendation || recommendation.length === 0) return 'No recommendations';
-    const firstRec = recommendation[0];
-    return `${firstRec.author}: ${firstRec.content.slice(0, 30)}...`;
-     
-    }
+      render: (recommendation) => {
+        if (!recommendation || recommendation.length === 0)
+          return "No recommendations";
+        const firstRec = recommendation[0];
+        return `${firstRec.author}: ${firstRec.content.slice(0, 30)}...`;
+      },
     },
   ];
 
@@ -95,9 +94,14 @@ function Composites() {
           pagination={false}
           dataSource={record.review || []}
           columns={[
-            { title: 'Author', dataIndex: 'author', key: 'author' },
-            { title: 'Subject', dataIndex: 'subject', key: 'subject' },
-            { title: 'Content', dataIndex: 'content', key: 'content', ellipsis: true },
+            { title: "Author", dataIndex: "author", key: "author" },
+            { title: "Subject", dataIndex: "subject", key: "subject" },
+            {
+              title: "Content",
+              dataIndex: "content",
+              key: "content",
+              ellipsis: true,
+            },
           ]}
           rowKey={(row) => row.id}
           bordered
@@ -109,9 +113,14 @@ function Composites() {
           pagination={false}
           dataSource={record.recommendation || []}
           columns={[
-            { title: 'Author', dataIndex: 'author', key: 'author' },
-            { title: 'Rating', dataIndex: 'rate', key: 'rate' },
-            { title: 'Content', dataIndex: 'content', key: 'content', ellipsis: true },
+            { title: "Author", dataIndex: "author", key: "author" },
+            { title: "Rating", dataIndex: "rate", key: "rate" },
+            {
+              title: "Content",
+              dataIndex: "content",
+              key: "content",
+              ellipsis: true,
+            },
           ]}
           rowKey={(row) => row.id}
           bordered
