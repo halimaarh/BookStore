@@ -1,23 +1,25 @@
-import { useEffect, useState } from 'react';
-import { Table, Spin, message, Input } from 'antd';
-import axios from 'axios';
+import { useEffect, useState } from "react";
+import { Table, Spin, message, Input } from "antd";
+import axios from "axios";
 
 function Composites() {
   const [composites, setComposites] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  const fetchComposites = async (searchId = '') => {
+  const fetchComposites = async (searchId = "") => {
     setLoading(true);
     try {
       const url = searchId
         ? `https://bookcomposite.onrender.com/api/v1/bookcomposite/${searchId}`
-        : 'https://bookcomposite.onrender.com/api/v1/bookcomposite';
-      
+        : "https://bookcomposite.onrender.com/api/v1/bookcomposite";
+
       const response = await axios.get(url);
-      setComposites(Array.isArray(response.data) ? response.data : [response.data]);
+      setComposites(
+        Array.isArray(response.data) ? response.data : [response.data]
+      );
     } catch (error) {
-      console.error('Error:', error);
-      message.error('Failed to fetch composites');
+      console.error("Error:", error);
+      message.error("Failed to fetch composites");
       setComposites([]);
     } finally {
       setLoading(false);
@@ -33,37 +35,37 @@ function Composites() {
   };
 
   const columns = [
-    { 
-      title: 'Book ID',
-      dataIndex: ['book', 'bookId'],
-      key: 'bookId',
-      width: 100
-    },
-    { 
-      title: 'Name',
-      dataIndex: ['book', 'name'],
-      key: 'name'
-    },
-    { 
-      title: 'Weight',
-      dataIndex: ['book', 'weight'],
-      key: 'weight',
-      width: 100
-    },
     {
-      title: 'Reviews',
-      dataIndex: 'reviews',
-      key: 'reviews',
+      title: "Book ID",
+      dataIndex: ["book", "bookId"],
+      key: "bookId",
       width: 100,
-      render: (reviews) => reviews?.length || 0
     },
     {
-      title: 'Recommendations',
-      dataIndex: 'recommendations',
-      key: 'recommendations',
+      title: "Name",
+      dataIndex: ["book", "name"],
+      key: "name",
+    },
+    {
+      title: "Weight",
+      dataIndex: ["book", "weight"],
+      key: "weight",
+      width: 100,
+    },
+    {
+      title: "Reviews",
+      dataIndex: "reviews",
+      key: "reviews",
+      width: 100,
+      render: (reviews) => reviews?.length || 0,
+    },
+    {
+      title: "Recommendations",
+      dataIndex: "recommendations",
+      key: "recommendations",
       width: 150,
-      render: (recommendations) => recommendations?.length || 0
-    }
+      render: (recommendations) => recommendations?.length || 0,
+    },
   ];
 
   const expandedRowRender = (record) => {
@@ -75,9 +77,9 @@ function Composites() {
           pagination={false}
           dataSource={record.reviews}
           columns={[
-            { title: 'Author', dataIndex: 'author' },
-            { title: 'Subject', dataIndex: 'subject' },
-            { title: 'Content', dataIndex: 'content', ellipsis: true }
+            { title: "Author", dataIndex: "author" },
+            { title: "Subject", dataIndex: "subject" },
+            { title: "Content", dataIndex: "content", ellipsis: true },
           ]}
           rowKey={(row) => row.id}
         />
@@ -88,9 +90,9 @@ function Composites() {
           pagination={false}
           dataSource={record.recommendations}
           columns={[
-            { title: 'Author', dataIndex: 'author' },
-            { title: 'Rating', dataIndex: 'rate' },
-            { title: 'Content', dataIndex: 'content', ellipsis: true }
+            { title: "Author", dataIndex: "author" },
+            { title: "Rating", dataIndex: "rate" },
+            { title: "Content", dataIndex: "content", ellipsis: true },
           ]}
           rowKey={(row) => row.id}
         />
@@ -99,13 +101,17 @@ function Composites() {
   };
 
   if (loading) {
-    return <div className="flex justify-center p-8"><Spin /></div>;
+    return (
+      <div className="flex justify-center p-8">
+        <Spin />
+      </div>
+    );
   }
 
   return (
     <div className="p-4">
       <h2 className="text-xl mb-4">Book Composites</h2>
-      
+
       <Input.Search
         placeholder="Search by Book ID..."
         allowClear
@@ -122,7 +128,7 @@ function Composites() {
         rowKey={(record) => record.book.bookId}
         expandable={{
           expandedRowRender,
-          expandRowByClick: true
+          expandRowByClick: true,
         }}
       />
     </div>
