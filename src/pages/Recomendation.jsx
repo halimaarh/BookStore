@@ -118,13 +118,19 @@ const Recomendation = ({ sidebarWidth }) => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  const fetchRecommendations = async () => {
+  const fetchRecommendations = async (searchId ='') => {
     setLoading(true);
     try {
-      const response = await axios.get(BASE_URL); // Fetch recommendations from the API
-      setRecommendations(response.data); // Update state with fetched recommendations
+       const BASE_URL = searchId
+         ? `https://recommendationservice-rlr1.onrender.com/api/v1/recommendations/${searchId}`
+         : 'https://recommendationservice-rlr1.onrender.com/api/v1/recommendations/';
+      
+      const res = await axios.get(BASE_URL); // Fetch recommendations from the API
+      // setRecommendations(response.data); // Update state with fetched recommendations
+      setRecommendations(Array.isArray(res.data) ? res.data : [res.data]);
       message.success("Recommendations fetched successfully!");
     } catch (error) {
+      setRecommendations([]);
       console.error("Error fetching recommendations:", error);
       message.error("Failed to fetch recommendations. Please try again.");
     } finally {
@@ -132,17 +138,11 @@ const Recomendation = ({ sidebarWidth }) => {
     }
   };
 
-  // const deleteRecommendation = async (recommendationId) => {
-  //   console.log("Deleting Recommendation ID:", recommendationId); // Debug the ID
-  //   try {
-  //     await axios.delete(`${BASE_URL}/${recommendationId}`); // Delete recommendation by ID
-  //     message.success(`Recommendation with ID ${recommendationId} deleted successfully!`);
-  //     fetchRecommendations(); // Refresh the list
-  //   } catch (error) {
-  //     console.error("Error deleting recommendation:", error);
-  //     message.error("Failed to delete recommendation. Please try again.");
-  //   }
-  // };
+  
+   const handleSearch = (value) => {
+    fetchRecommendations(value);
+   };
+
 
     const handleDelete = async (recommendationId) => {
     try {
@@ -188,7 +188,7 @@ const Recomendation = ({ sidebarWidth }) => {
         placeholder="Search by Book ID..."
         allowClear
         enterButton
-        //  onSearch={handleSearch}
+         onSearch={handleSearch}
          style={{ maxWidth: 400, marginBottom: 16 }}
          loading={loading}
       />

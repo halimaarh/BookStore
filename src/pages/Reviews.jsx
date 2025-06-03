@@ -155,11 +155,18 @@ const Reviews = ({ sidebarWidth }) => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  const fetchReviews = async () => {
+
+
+  const fetchReviews = async (searchId = '') => {
     setLoading(true);
     try {
+        const BASE_URL = searchId
+         ? `https://reviewservice-to9o.onrender.com/api/v1/reviews/${searchId}`
+        : 'https://reviewservice-to9o.onrender.com/api/v1/reviews/';
       const response = await axios.get(BASE_URL); // Fetch reviews from the API
-      setReviews(response.data); // Update state with fetched reviews
+      setReviews(Array.isArray(response.data) ? response.data : [response.data]);
+
+      // setReviews(response.data); // Update state with fetched reviews
       message.success("reviews fetched successfully!");
     } catch (error) {
       console.error("Error fetching reviews:", error);
@@ -169,17 +176,10 @@ const Reviews = ({ sidebarWidth }) => {
     }
   };
 
-  // const deletereview = async (reviewId) => {
-  //   console.log("Deleting review ID:", reviewId); // Debug the ID
-  //   try {
-  //     await axios.delete(`${BASE_URL}/${reviewId}`); // Delete review by ID
-  //     message.success(`review with ID ${reviewId} deleted successfully!`);
-  //     fetchreviews(); // Refresh the list
-  //   } catch (error) {
-  //     console.error("Error deleting review:", error);
-  //     message.error("Failed to delete review. Please try again.");
-  //   }
-  // };
+     const handleSearch = (value) => {
+     fetchReviews(value);
+   };
+
 
     const handleDelete = async (reviewId) => {
     try {
@@ -228,7 +228,7 @@ const Reviews = ({ sidebarWidth }) => {
         placeholder="Search by Book ID..."
         allowClear
         enterButton
-        //  onSearch={handleSearch}
+         onSearch={handleSearch}
          style={{ maxWidth: 400, marginBottom: 16 }}
          loading={loading}
       />

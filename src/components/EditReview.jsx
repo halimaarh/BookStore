@@ -204,6 +204,7 @@ const EditReview = () => {
         });
 
         message.success("Review details loaded successfully!");
+        console.log("API Response:", response.data); // Debug API response
       } catch (error) {
         console.error("Error fetching review details:", error);
         if (error.response) {
@@ -231,6 +232,7 @@ const EditReview = () => {
         headers: { "Content-Type": "application/json" },
       });
       message.success("Review updated successfully!");
+      console.log("Updated Reviews:", response.data);
       navigate('/dashboard/reviews');
     } catch (error) {
       console.error("Error updating review:", error);
