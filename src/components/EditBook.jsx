@@ -3,12 +3,14 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
+import CustomPopup from './CustomPopup';
 
 function EditBook() {
   const [form] = Form.useForm();
   const navigate = useNavigate();
   const { id } = useParams();
   const [loading, setLoading] = useState(true);
+  const [successPopup, setSuccessPopup] = useState({ visible: false, title: '' });
 
   useEffect(() => {
     const fetchBook = async () => {
@@ -29,8 +31,10 @@ function EditBook() {
   const onFinish = async (values) => {
     try {
       await axios.put(`https://bookservice-a2qm.onrender.com/api/v1/books/${id}`, values);
-      message.success('Book updated successfully');
-      navigate('/dashboard/books');
+      setSuccessPopup({ visible: true, title: 'Book Updated Successfully!' });
+      setTimeout(() => {
+        navigate('/dashboard/books');
+      }, 2000);
     } catch (error) {
       message.error('Failed to update book');
     }
@@ -85,6 +89,12 @@ function EditBook() {
           </div>
         </Form.Item>
       </Form>
+
+      <CustomPopup 
+        visible={successPopup.visible}
+        title={successPopup.title}
+        onClose={() => setSuccessPopup({ visible: false, title: '' })}
+      />
     </div>
   );
 }

@@ -3,6 +3,8 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
+import CustomPopup from './CustomPopup';
+
 
 // function EditRecommendation() {
 //   const [form] = Form.useForm();
@@ -67,6 +69,8 @@ const EditRecommendation = () => {
   const [loading, setLoading] = useState(false);
   const [form] = Form.useForm(); // Ant Design form instance
   const { id } = useParams(); // Get recommendationId from URL params
+  const [successPopup, setSuccessPopup] = useState({ visible: false, title: '' });
+  
   const navigate = useNavigate();
   useEffect(() => {
     const fetchRecommendation = async () => {
@@ -119,7 +123,11 @@ const EditRecommendation = () => {
       });
       message.success("Recommendation updated successfully!");
       console.log("Updated Recommendation:", response.data);
-      navigate('/dashboard/recomendations');
+      setSuccessPopup({ visible: true, title: 'Recommendation Updated Successfully!' });
+      setTimeout(() => {
+        navigate('/dashboard/recomendations');
+      }, 2000);
+      // navigate('/dashboard/recomendations');
     } catch (error) {
       console.error("Error updating recommendation:", error);
       message.error("Failed to update recommendation.");
@@ -187,6 +195,11 @@ const EditRecommendation = () => {
               </div>
             </Form.Item>
           </Form>
+            <CustomPopup 
+                  visible={successPopup.visible}
+                  title={successPopup.title}
+                  onClose={() => setSuccessPopup({ visible: false, title: '' })}
+                />
         </>
       )}
     </div>

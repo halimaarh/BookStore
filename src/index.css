@@ -6,3 +6,12 @@
   --font-mont: "Montserrat", sans-serif;
   --font-plus: "Plus Jakarta Sans", "sans-serif";
 }
+
+.success-popup .ant-modal-content {
+  border-radius: 12px;
+  padding: 24px;
+}
+
+.success-popup .ant-modal-body {
+  padding: 0;
+}

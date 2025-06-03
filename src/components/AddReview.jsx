@@ -1,10 +1,15 @@
 import { Form, Input, Button, message, InputNumber } from 'antd';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { useState } from 'react';
+import CustomPopup from './CustomPopup';
+
 
 export default function AddReview() {
   const [form] = Form.useForm();
   const navigate = useNavigate();
+    const [successPopup, setSuccessPopup] = useState({ visible: false, title: '' });
+
 
   const onFinish = async (values) => {
     try {
@@ -16,7 +21,11 @@ export default function AddReview() {
         content: values.content
       });
       message.success('Review added successfully');
-      navigate('/dashboard/reviews');
+      setSuccessPopup({ visible: true, title: 'Review Added Successfully!' });
+      setTimeout(() => {
+        navigate('/dashboard/reviews');
+      }, 2000);
+      // navigate('/dashboard/reviews');
     } catch (error) {
       message.error('Failed to add review');
     }
@@ -65,6 +74,11 @@ export default function AddReview() {
           </div>
         </Form.Item>
       </Form>
+        <CustomPopup 
+        visible={successPopup.visible}
+        title={successPopup.title}
+        onClose={() => setSuccessPopup({ visible: false, title: '' })}
+      />
     </div>
   );
 }

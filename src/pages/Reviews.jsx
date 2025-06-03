@@ -146,6 +146,7 @@ import axios from "axios";
 import { List, Button, Typography, message, Spin,Input } from "antd";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
+import CustomPopup from '../components/CustomPopup';
 
 const { Title } = Typography;
 const BASE_URL = "https://reviewservice-to9o.onrender.com/api/v1/reviews/";
@@ -154,6 +155,8 @@ const Reviews = ({ sidebarWidth }) => {
   const [reviews, setReviews] = useState([]);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const [successPopup, setSuccessPopup] = useState({ visible: false, title: '' });
+
 
 
 
@@ -185,6 +188,7 @@ const Reviews = ({ sidebarWidth }) => {
     try {
       await axios.delete(`https://reviewservice-to9o.onrender.com/api/v1/reviews/${reviewId}`);
       message.success('Review deleted successfully');
+      setSuccessPopup({ visible: true, title: 'Review Deleted Successfully!' });
       const response = await axios.get('https://reviewservice-to9o.onrender.com/api/v1/reviews/');
       setReviews(response.data || []);
     } catch (error) {
@@ -204,6 +208,8 @@ const Reviews = ({ sidebarWidth }) => {
         marginLeft: sidebarWidth, // Adjust content based on sidebar width
         transition: "margin-left 0.3s ease", // Smooth transition when sidebar collapses
         padding: "40px 20px",
+        fontFamily: "font-plus",
+
       }}
     >
       <div
@@ -217,7 +223,7 @@ const Reviews = ({ sidebarWidth }) => {
         }}
       >
         <Title level={3} style={{ margin: 0 }}>
-          reviews
+          Reviews
         </Title>
         <Link to="/dashboard/add-review">
            <Button type="primary" className="bg-blue-500 hover:bg-blue-600">
@@ -261,9 +267,16 @@ const Reviews = ({ sidebarWidth }) => {
                 description={item.content}
               />
             </List.Item>
+            
           )}
         />
+        
       )}
+        <CustomPopup 
+              visible={successPopup.visible}
+              title={successPopup.title}
+              onClose={() => setSuccessPopup({ visible: false, title: '' })}
+            />
     </div>
   );
 };

@@ -14,6 +14,7 @@ function Composites() {
         : 'https://bookcomposite.onrender.com/api/v1/bookcomposite';
       
       const response = await axios.get(url);
+      // If searchId is provided, fetch that specific book details
       setComposites(Array.isArray(response.data) ? response.data : [response.data]);
     } catch (error) {
       console.error('Error:', error);
@@ -35,8 +36,8 @@ function Composites() {
   const columns = [
     { 
       title: 'Book ID',
-      dataIndex: ['book', 'id'],
-      key: 'id',
+      dataIndex: ['book', 'bookId'],
+      key: 'bookId',
       width: 100
     },
     { 
@@ -52,14 +53,14 @@ function Composites() {
     },
     {
       title: 'Reviews',
-      dataIndex: ['book', 'reviews'],
+      dataIndex: 'reviews',
       key: 'reviews',
       width: 100,
       render: (reviews) => reviews?.length || 0
     },
     {
       title: 'Recommendations',
-      dataIndex: ['book', 'recommendations'],
+      dataIndex: 'recommendations',
       key: 'recommendations',
       width: 100,
       render: (recommendations) => recommendations?.length || 0
@@ -93,7 +94,7 @@ function Composites() {
             { title: 'Rating', dataIndex: 'rate' },
             { title: 'Content', dataIndex: 'content', ellipsis: true }
           ]}
-          rowKey="id"
+          rowKey="Id"
         />
       </div>
     );
@@ -120,7 +121,7 @@ function Composites() {
         loading={loading}
         dataSource={composites}
         columns={columns}
-        rowKey={(record) => record.book?.id}
+        rowKey={(record) => record.book.bookId}
         expandable={{
           expandedRowRender,
           expandRowByClick: true

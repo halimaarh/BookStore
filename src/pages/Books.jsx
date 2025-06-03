@@ -3,10 +3,12 @@ import { Table, Button, message, Popconfirm, Input } from "antd";
 import { useNavigate, Link } from "react-router-dom";
 import axios from "axios";
 import { Space } from "antd";
+import CustomPopup from '../components/CustomPopup';
 
 function Books() {
   const [books, setBooks] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [successPopup, setSuccessPopup] = useState({ visible: false, title: '' });
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -35,7 +37,7 @@ function Books() {
       await axios.delete(
         `https://bookservice-a2qm.onrender.com/api/v1/books/${bookId}`
       );
-      message.success("Book deleted");
+      setSuccessPopup({ visible: true, title: 'Book Deleted Successfully!' });
       fetchBooks(); // Refresh table
     } catch (error) {
       message.error("Failed to delete book");
@@ -103,7 +105,7 @@ function Books() {
   ];
 
   return (
-    <div className="space-y-6 p-6">
+    <div className="space-y-6 font-plus p-6">
       <div className="flex items-center justify-between">
         <h2 className="text-2xl font-semibold text-gray-800">Books</h2>
         <Link to="/dashboard/add-book">
@@ -129,6 +131,12 @@ function Books() {
         rowKey="bookId"
         className="shadow-sm rounded-lg overflow-hidden"
         scroll={{ x: true }}
+      />
+
+      <CustomPopup 
+        visible={successPopup.visible}
+        title={successPopup.title}
+        onClose={() => setSuccessPopup({ visible: false, title: '' })}
       />
     </div>
   );

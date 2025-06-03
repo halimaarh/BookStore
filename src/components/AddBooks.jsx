@@ -1,10 +1,13 @@
 import { Form, Input, Button, message } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { useState } from 'react';
+import CustomPopup from './CustomPopup';
 
 function AddBooks() {
   const [form] = Form.useForm();
   const navigate = useNavigate();
+  const [successPopup, setSuccessPopup] = useState({ visible: false, title: '' });
 
   const onFinish = async (values) => {
     try {
@@ -12,8 +15,10 @@ function AddBooks() {
         name: values.name,
         weight: values.weight
       });
-      message.success('Book added successfully');
-      navigate('/dashboard/books');
+      setSuccessPopup({ visible: true, title: 'Book Added Successfully!' });
+      setTimeout(() => {
+        navigate('/dashboard/books');
+      }, 2000);
     } catch (error) {
       message.error('Failed to add book');
     }
@@ -62,15 +67,23 @@ function AddBooks() {
             >
               Add Book
             </Button>
-            <Button 
-              onClick={() => navigate('/books')}
-              className="h-10 px-6"
-            >
-              Cancel
-            </Button>
+            <Link to="/dashboard/books">
+              <Button
+                // onClick={() => navigate('dashboard/books')}
+                className="h-10 px-6"
+              >
+                Cancel
+              </Button>
+            </Link>
           </div>
         </Form.Item>
       </Form>
+
+      <CustomPopup 
+        visible={successPopup.visible}
+        title={successPopup.title}
+        onClose={() => setSuccessPopup({ visible: false, title: '' })}
+      />
     </div>
   );
 }

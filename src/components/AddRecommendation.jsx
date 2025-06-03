@@ -2,22 +2,28 @@ import { Form, Input, Button, message, InputNumber } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
+import { useState } from 'react';
+import CustomPopup from './CustomPopup'
+
 
 function AddRecommendation() {
   const [form] = Form.useForm();
   const navigate = useNavigate();
+   const [successPopup, setSuccessPopup] = useState({ visible: false, title: '' });
+
 
   const onFinish = async (values) => {
     try {
       await axios.post('https://recommendationservice-rlr1.onrender.com/api/v1/recommendations', {
-        // id:id,
         bookId: values.bookId,
         author: values.author,
         rate: values.rate,
         content: values.content
       });
-      message.success('Recommendation added successfully');
-      navigate('/dashboard/recomendations');
+      setSuccessPopup({ visible: true, title: 'Recommendation Added Successfully!' });
+      setTimeout(() => {
+        navigate('/dashboard/recomendations');
+      }, 2000);
     } catch (error) {
       message.error('Failed to add recommendation');
     }
@@ -80,6 +86,11 @@ function AddRecommendation() {
           </div>
         </Form.Item>
       </Form>
+      <CustomPopup 
+        visible={successPopup.visible}
+        title={successPopup.title}
+        onClose={() => setSuccessPopup({ visible: false, title: '' })}
+      />
     </div>
   );
 }

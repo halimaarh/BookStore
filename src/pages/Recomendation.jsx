@@ -108,6 +108,9 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { List, Button, Typography, message, Spin,Input } from "antd";
 import { useNavigate } from "react-router-dom";
+import CustomPopup from '../components/CustomPopup';
+
+
 import { Link } from "react-router-dom";
 
 const { Title } = Typography;
@@ -116,6 +119,8 @@ const BASE_URL = "https://recommendationservice-rlr1.onrender.com/api/v1/recomme
 const Recomendation = ({ sidebarWidth }) => {
   const [recommendations, setRecommendations] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [successPopup, setSuccessPopup] = useState({ visible: false, title: '' });
+
   const navigate = useNavigate();
 
   const fetchRecommendations = async (searchId ='') => {
@@ -148,6 +153,7 @@ const Recomendation = ({ sidebarWidth }) => {
     try {
       await axios.delete(`https://recommendationservice-rlr1.onrender.com/api/v1/recommendations/${recommendationId}`);
       message.success('Recommendation deleted');
+      setSuccessPopup({ visible: true, title: 'Recommendation Deleted Successfully!' });
       fetchRecommendations();
     } catch (error) {
       message.error('Failed to delete recommendation');
@@ -164,6 +170,7 @@ const Recomendation = ({ sidebarWidth }) => {
         marginLeft: sidebarWidth, // Adjust content based on sidebar width
         transition: "margin-left 0.3s ease", // Smooth transition when sidebar collapses
         padding: "40px 20px",
+        fontFamily: "font-plus",
       }}
     >
       <div
@@ -224,6 +231,11 @@ const Recomendation = ({ sidebarWidth }) => {
           )}
         />
       )}
+        <CustomPopup 
+              visible={successPopup.visible}
+              title={successPopup.title}
+              onClose={() => setSuccessPopup({ visible: false, title: '' })}
+            />
     </div>
   );
 };
