@@ -1,6 +1,7 @@
 // App.jsx
 import { Button, Form, Input, Card, Typography } from 'antd';
 import { Link } from 'react-router-dom';
+import { ArrowLeftOutlined } from '@ant-design/icons';
 const { Title } = Typography;
 
 function Login() {
@@ -9,7 +10,16 @@ function Login() {
   };
 
   return (
-    <div className="min-h-screen bg-blue-50 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-blue-50 flex items-center justify-center p-4 relative">
+      <Link to="/" className="absolute top-6 left-6">
+        <Button 
+          icon={<ArrowLeftOutlined />}
+          className="flex items-center hover:text-blue-600 transition-colors"
+        >
+          Back to Home
+        </Button>
+      </Link>
+      
       <Card bordered={false} className="w-full max-w-md shadow-lg rounded-lg">
         <Title level={3} className="text-center text-blue-700 mb-6">Login</Title>
         <Form layout="vertical" onFinish={onFinish} className="w-full">
