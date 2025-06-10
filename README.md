@@ -1,12 +1,28 @@
-# React + Vite
+📚 Spring Boot Book Project (Frontend + Microservices)
+This project is the frontend of a Spring Boot application for managing and viewing books. It is containerized using Docker and utilizes multiple databases and microservices to support its functionality.
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+🔧 Technologies Used:
+Spring Boot (Java)
 
-Currently, two official plugins are available:
+Docker for containerization
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+PostgreSQL, MySQL, and MongoDB as data stores
 
-## Expanding the ESLint configuration
+Eureka Server for service discovery
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+React for the user interface
+
+Render for deploying
+
+🧩 Microservices Included:
+Review Service – handles user reviews for books (MongoDB)
+
+Recommendation Service – suggests books (PostgreSQL)
+
+Book Service – manages book data (MySQL)
+
+Book Composite Service – aggregates data from other services
+
+Eureka Server – service registry for all microservices
+
+This project demonstrates a complete microservices architecture with service discovery and multi-database integration.
